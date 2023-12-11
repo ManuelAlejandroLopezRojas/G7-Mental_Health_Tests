@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="coffee">
+    <img class="coffee-img" src="images/" alt="">
+    <div class="coffee-content container">
+        <h2>{{ categoria.nombre }}</h2>
+        <p>{{ categoria.descripcion }}</p>
+        <a href="{% url 'preguntas_categoria' categoria_id=categoria.id %}" class="btn-1">preguntas</a>
+    </div>
+</section>
+{% endblock %}

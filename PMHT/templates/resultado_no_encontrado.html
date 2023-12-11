@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="resultado-no-encontrado">
+    <div class="container">
+        <h2>Resultado no encontrado</h2>
+        <p>No se encontró un resultado para la puntuación obtenida en la prueba.</p>
+        <p>Por favor, asegúrate de responder todas las preguntas y que la prueba esté configurada correctamente.</p>
+        <a href="{% url 'inicio' %}" class="btn btn-primary">Volver a la página de inicio</a>
+    </div>
+</section>
+{% endblock %}
