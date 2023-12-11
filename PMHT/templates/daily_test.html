@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/inicio.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/daily_test.css' %}">
     
 </head>
 <body>
@@ -22,18 +22,37 @@
 
         </div>
         <div class="header-content container">
-            <div class="container">
-                {% if categoria %}
-                    <h1>{{ categoria.nombre }}</h1>
-                    <p>{{ categoria.descripcion }}</p>
-                    <a href="{% url 'preguntas_categoria' categoria_id=categoria.id %}" class="btn-1">preguntas</a>
-                {% else %}
-                    <p>No se encontró la categoría con ID 1</p>
-                {% endif %}
-            </div>
+        <div class="container">
+            <h2>Prueba Diaria</h2>
+            <p>
+              Realiza la prueba diaria para evaluar tu bienestar emocional y psicológico.
+            </p>
+      
+            <form method="post" action="{% url 'calcular_resultado' categoria_id=categoria.id %}">
+                {% csrf_token %}
+                
+                <!-- Iterar sobre las preguntas y mostrar las opciones de respuesta -->
+                {% for pregunta in preguntas %}
+                  <div class="question">
+                    <h3>{{ pregunta.texto_pregunta }}</h3>
+                    <!-- Mostrar las opciones de respuesta -->
+                    {% for respuesta in pregunta.respuesta_set.all %}
+                      <label>
+                        <input type="radio" name="pregunta_{{ pregunta.id }}" value="{{ respuesta.id }}">
+                        {{ respuesta.texto_respuesta }}
+                      </label><br>
+                    {% endfor %}
+                  </div>
+                {% endfor %}
+                
+                <!-- Botón para enviar respuestas -->
+                <button type="submit">Enviar Respuestas</button>
+              </form>
+          </div>
         </div>
-        
     </header>
+
+
     <footer class="footer">
         <div class="footer-content container">
             <div class="link">

@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/inicio.css' %}">
-    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/inicio.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 </head>
 <body>
     <header class="header">
@@ -34,6 +37,67 @@
     {% block content %}
     {% endblock %}
 
+    <main class="services">
+
+        <i class="bi bi-chevron-left m-4"><a href="{% url 'inicio' %}"></a></i>
+
+        <div class="container">
+            <div class="row">
+                <!-- Sección 1 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src={% static 'images/motivacion.jpg' %} class="card-img-top" alt="Imagen 1">
+                        <div class="card-body">
+                            <h5 class="card-title">rompecabezas de motivacion</h5>
+                            <p class="card-text" style="color: black;">fksndflksdjfklkfjsdlkfjkldjfdskfjlksdklfjs.</p>
+                            <div style="position: relative;">
+                                <img src={% static 'images/motivacion.jpg' %} alt="Imagen Invisible"
+                                    style="opacity: 0.5; width: 100%;">
+                                <a href="{% url 'juego1' %}" class="btn btn-primary"
+                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección 2 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src={% static 'images/mentalidad.jpg' %} class="card-img-top" alt="Imagen 2">
+                        <div class="card-body">
+                            <h5 class="card-title">juego de preguntas</h5>
+                            <p class="card-text" style="color: black;">fksndflksdjfklkfjsdlkfjkldjfdskfjlksdklfjs.</p>
+                            <div style="position: relative;">
+                                <img src={% static 'images/mentalidad.jpg' %} alt="Imagen Invisible"
+                                    style="opacity: 0.5; width: 100%;">
+                                <a href="{% url 'juego2' %}" class="btn btn-primary"
+                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección 3 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="{% static 'images/respiracion.jpg' %}" class="card-img-top" alt="Imagen 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Título del juego 3</h5>
+                            <p class="card-text" style="color: black;">Descripción del juego 3.</p>
+                            <div style="position: relative;">
+                                <img src="{% static 'images/respiracion.jpg' %}" alt="Imagen Invisible" style="opacity: 0.5; width: 100%;">
+                                <a href="{% url 'juego3' %}" class="btn btn-primary"
+                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agregar la referencia a Bootstrap (asegúrate de que Bootstrap esté disponible en tu proyecto) -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </main>
 
     <footer class="footer">
         <div class="footer-content container">

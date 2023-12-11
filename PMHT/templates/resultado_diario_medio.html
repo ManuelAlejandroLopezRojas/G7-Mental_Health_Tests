@@ -21,19 +21,15 @@
             {% include 'navbar.html' %}
 
         </div>
+
         <div class="header-content container">
             <div class="container">
-                {% if categoria %}
-                    <h1>{{ categoria.nombre }}</h1>
-                    <p>{{ categoria.descripcion }}</p>
-                    <a href="{% url 'preguntas_categoria' categoria_id=categoria.id %}" class="btn-1">preguntas</a>
-                {% else %}
-                    <p>No se encontró la categoría con ID 1</p>
-                {% endif %}
+                <h1>{{ resultado.titulo }}</h4>
+                <p>{{ resultado.descripcion }}</p>
             </div>
         </div>
-        
     </header>
+
     <footer class="footer">
         <div class="footer-content container">
             <div class="link">

@@ -1,37 +1,27 @@
 from django.contrib import admin
-from .models import DailyTest, Question, Answer, DailyTestResponse, DailyTestResult, DailyTestHistory
+from .models import CategoriaTest, Pregunta, Respuesta, Resultado, Evento
 
-class DailyTestAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'fecha')
-    search_fields = ('usuario__username', 'fecha')
-    list_filter = ('usuario', 'fecha')
+@admin.register(CategoriaTest)
+class CategoriaTestAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'descripcion', 'slug')
+    search_fields = ('nombre', 'descripcion')
 
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('texto_pregunta',)
-    search_fields = ('texto_pregunta',)
+@admin.register(Pregunta)
+class PreguntaAdmin(admin.ModelAdmin):
+    list_display = ('texto_pregunta', 'categoria')
+    list_filter = ('categoria',)
 
-class AnswerAdmin(admin.ModelAdmin):
-    list_display = ('question', 'texto_respuesta', 'tipo_respuesta')
-    search_fields = ('question__texto_pregunta', 'texto_respuesta', 'tipo_respuesta')
-    list_filter = ('question', 'tipo_respuesta')
+@admin.register(Respuesta)
+class RespuestaAdmin(admin.ModelAdmin):
+    list_display = ('pregunta', 'texto_respuesta', 'valor')
+    list_filter = ('pregunta',)
 
-class DailyTestResponseAdmin(admin.ModelAdmin):
-    list_display = ('daily_test', 'question', 'selected_answer')
-    search_fields = ('daily_test__usuario__username', 'question__texto_pregunta', 'selected_answer__texto_respuesta')
+@admin.register(Resultado)
+class ResultadoAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'puntuacion_min', 'puntuacion_max')
+    search_fields = ('titulo',)
 
-class DailyTestResultAdmin(admin.ModelAdmin):
-    list_display = ('daily_test', 'count_positive', 'count_neutral', 'count_negative')
-    search_fields = ('daily_test__usuario__username',)
-    list_filter = ('daily_test__usuario',)
-
-class DailyTestHistoryAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'fecha', 'result')
-    search_fields = ('usuario__username',)
-    list_filter = ('usuario', 'fecha')
-
-admin.site.register(DailyTest, DailyTestAdmin)
-admin.site.register(Question, QuestionAdmin)
-admin.site.register(Answer, AnswerAdmin)
-admin.site.register(DailyTestResponse, DailyTestResponseAdmin)
-admin.site.register(DailyTestResult, DailyTestResultAdmin)
-admin.site.register(DailyTestHistory, DailyTestHistoryAdmin)
+@admin.register(Evento)
+class EventoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'start', 'color', 'editable')
+    search_fields = ['title']

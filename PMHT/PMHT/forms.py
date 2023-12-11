@@ -2,6 +2,8 @@ from django import forms
 
 from django.contrib.auth.models import User
 
+from core.models import Encuentro
+
 class RegisterForm(forms.Form):
     first_name = forms.CharField(label='Nombre(s)',
                                 required=True,
@@ -76,3 +78,8 @@ class RegisterForm(forms.Form):
 
         if cleaned_data.get('password2') != cleaned_data.get('password'):
             self.add_error('password2', 'el password no coincide')
+
+class EncuentroForm(forms.ModelForm):
+    class Meta:
+        model = Encuentro
+        fields = '__all__'
