@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import Http404, JsonResponse
 
 from core.models import CategoriaTest, Pregunta, Respuesta, Resultado, Encuentro, Evento
+from core.models import RespuestaUsuario
 from django.db.models import Count
 
 from django.views import View
@@ -112,6 +113,13 @@ def calcular_resultado(request, categoria_id):
                 respuesta_id = int(value)
                 respuesta = Respuesta.objects.get(id=respuesta_id)
                 puntuacion_total += respuesta.valor
+
+                respuesta_usuario = RespuestaUsuario(
+                    usuario=request.user,
+                    pregunta=respuesta.pregunta,
+                    respuesta_seleccionada=respuesta,
+                )
+                respuesta_usuario.save()
 
         if 10 <= puntuacion_total <= 30:
             # Redirect to the agendamiento_encuentro view

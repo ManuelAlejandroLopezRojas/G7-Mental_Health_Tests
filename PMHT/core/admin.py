@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CategoriaTest, Pregunta, Respuesta, Resultado, Evento
+from .models import CategoriaTest, Pregunta, Respuesta, Resultado, Evento, RespuestaUsuario
 
 @admin.register(CategoriaTest)
 class CategoriaTestAdmin(admin.ModelAdmin):
@@ -20,6 +20,12 @@ class RespuestaAdmin(admin.ModelAdmin):
 class ResultadoAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'puntuacion_min', 'puntuacion_max')
     search_fields = ('titulo',)
+class RespuestaUsuarioAdmin(admin.ModelAdmin):
+    list_display = ['usuario', 'pregunta', 'respuesta_seleccionada', 'fecha_respuesta']
+    readonly_fields = ['usuario', 'pregunta', 'respuesta_seleccionada', 'fecha_respuesta']
+    list_filter = ('usuario',)
+
+admin.site.register(RespuestaUsuario, RespuestaUsuarioAdmin)
 
 @admin.register(Evento)
 class EventoAdmin(admin.ModelAdmin):

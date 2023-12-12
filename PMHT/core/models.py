@@ -55,6 +55,19 @@ class ResultadoPregunta(models.Model):
     def __str__(self):
         return f"Resultado para {self.respuesta} -> {self.resultado}"
 
+class RespuestaUsuario(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
+    respuesta_seleccionada = models.ForeignKey(Respuesta, on_delete=models.CASCADE)
+    fecha_respuesta = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.pregunta.texto_pregunta} - {self.respuesta_seleccionada.texto_respuesta}"
+
+    class Meta:
+        verbose_name_plural = 'Respuestas de Usuarios'
+
+
 ######
 class Evento(models.Model):
     title = models.CharField(max_length=255)
