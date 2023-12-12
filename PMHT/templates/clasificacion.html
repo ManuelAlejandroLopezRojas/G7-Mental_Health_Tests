@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabla de Clasificación</title>
+    <!-- Incluir los enlaces a los archivos de estilos de Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(90deg, #2ecc71, #3498db);
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+                background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            z-index: -1;
+        }
+
+        .container {
+            position: relative;
+            padding-top: 50px;
+        }
+
+        .table-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .table-header {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
+        .table-header th {
+            border-color: #454d55;
+        }
+
+        .table-content {
+            background-color: #ffffff;
+        }
+
+        .table-content tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Eliminar el color amarillo del primer usuario */
+        .top-user td:first-child {
+            background-color: transparent !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'inicio' %}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;">Regresar a Inicio</a>
+    </header>
+
+<div class="background-image"></div>
+
+<div class="container">
+    <h2 class="text-center text-dark mb-4">Tabla de Clasificación</h2>
+    <div class="table-section">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-header">
+                    <tr>
+                        <th scope="col">Posición</th>
+                        <th scope="col">Nombre de Usuario</th>
+                        <th scope="col">Puntuación</th>
+                    </tr>
+                </thead>
+                <tbody class="table-content">
+                    <!-- Iterar sobre las puntuaciones para mostrar la tabla -->
+                    {% for puntuacion in puntuaciones %}
+                    <tr {% if forloop.first %}class="top-user"{% endif %}>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {% if puntuacion.usuario %}
+                            {{ puntuacion.usuario.username }}
+                            {% else %}
+                            Nombre no disponible
+                            {% endif %}
+                        </td>
+                        <td>{{ puntuacion.respuestas_correctas }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Incluir el script de Bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

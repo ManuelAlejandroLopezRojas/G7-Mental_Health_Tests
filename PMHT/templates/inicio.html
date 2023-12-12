@@ -1,0 +1,256 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/inicio.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="menu container">
+            <a href="{% url 'inicio' %}" class="logo">Mental Health Tests</a>
+
+            <input type="checkbox" id="menu" />
+            <label for="menu">
+                <img src="../static/images/menu.png" class="menu-icono" alt="">
+            </label>
+
+            {% include 'navbar.html' %}
+
+        </div>
+        <div class="header-content container">
+            <h1>Mental Health Tests</h1>
+            <p>"Mental Health Tests" es una plataforma en línea que tiene como objetivo brindar apoyo
+                y recursos relacionados con la salud mental. Su enfoque principal es proporcionar
+                una variedad de pruebas y evaluaciones de salud mental diseñadas para ayudar a las personas
+                a comprender y evaluar su bienestar emocional y psicológico.
+            </p>
+        </div>
+    </header>
+
+    <section class="coffee">
+        <img class="coffee-img" src="images/" alt="">
+        <div class="coffee-content container">
+            <h2>Planteamiento del Problema</h2>
+            <p class="txt-p">
+                La salud mental es un componente esencial de la vida de las personas,
+                y cada vez más individuos buscan comprender y evaluar su bienestar emocional.
+                Sin embargo, el acceso a pruebas psicológicas precisas y confiables puede ser limitado o costoso.
+                La falta de acceso a evaluaciones de salud mental de calidad puede dificultar la identificación
+                de posibles desafíos emocionales y la toma de decisiones informadas para abordarlos.
+                <br><br>
+                Además, en la era digital, las personas recurren cada vez más a recursos en línea para
+                evaluar su salud mental en un entorno cómodo y privado. Existe una creciente demanda de
+                plataformas que ofrezcan pruebas psicológicas de alta calidad y fácil acceso para ayudar
+                a las personas a comprender y abordar sus desafíos emocionales.
+
+            </p>
+            <div class="coffee-group">
+                <div class="coffee-1">
+                    <img src="../static/images/c1.png" alt="">
+                    <h3>Acceso Limitado a Evaluaciones de Salud Mental:</h3>
+                    <p>
+                        Muchas personas no tienen acceso a pruebas psicológicas de calidad
+                        que les permitan evaluar su salud mental y comprender mejor su bienestar
+                        emocional.
+                    </p>
+                </div>
+                <div class="coffee-1">
+                    <img src="../static/images/c3.png" alt="">
+                    <h3>Apoyo al Bienestar Emocional:</h3>
+                    <p>
+                        Ofrecer pruebas psicológicas en línea es fundamental para apoyar el bienestar emocional
+                        y ayudar a las personas a comprender y abordar sus desafíos emocionales de manera informada.
+                    </p>
+                </div>
+
+            </div>
+            <p class="txt-p">
+                El proyecto "Mental Health Tests" se propone abordar estos problemas
+                al proporcionar una plataforma en línea que ofrezca una variedad de pruebas
+                psicológicas de calidad. El objetivo es brindar a las personas un acceso fácil
+                y confiable para evaluar su salud mental y tomar decisiones informadas sobre su bienestar emocional.
+            </p>
+        </div>
+    </section>
+
+    <main class="services">
+
+
+
+        <main class="services">
+
+
+
+            <div class="container">
+                <div class="row">
+                    <!-- Sección 1 -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src={% static 'images/motivacion.jpg' %} class="card-img-top" alt="Imagen 1">
+                            <div class="card-body">
+                                <h5 class="card-title">rompecabezas de motivacion</h5>
+                                <p class="card-text" style="color: black;">Resuelve un desafiante rompecabezas de números en una sola pantalla. Intenta completarlo con rapidez y precisión.</p>
+                                <div style="position: relative;">
+                                    <img src={% static 'images/motivacion.jpg' %} alt="Imagen Invisible"
+                                        style="opacity: 0.5; width: 100%;">
+                                    <a href="{% url 'juego1' %}" class="btn btn-primary"
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Sección 2 -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src={% static 'images/mentalidad.jpg' %} class="card-img-top" alt="Imagen 2">
+                            <div class="card-body">
+                                <h5 class="card-title">juego de preguntas</h5>
+                                <p class="card-text" style="color: black;">Responde preguntas relacionadas con una imagen que se muestra por un corto periodo. Pon a prueba tu atención y capacidad de respuesta rápida.</p>
+                                <div style="position: relative;">
+                                    <img src={% static 'images/mentalidad.jpg' %} alt="Imagen Invisible"
+                                        style="opacity: 0.5; width: 100%;">
+                                    <a href="{% url 'juego2' %}" class="btn btn-primary"
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Sección 3 -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="{% static 'images/respiracion.jpg' %}" class="card-img-top" alt="Imagen 3">
+                            <div class="card-body">
+                                <h5 class="card-title">Ejercicio de respiracion</h5>
+                                <p class="card-text" style="color: black;">Sigue la animación de una bola subiendo y bajando para practicar una respiración calmada. Ideal para reducir el estrés y relajarte.</p>
+                                <div style="position: relative;">
+                                    <img src="{% static 'images/respiracion.jpg' %}" alt="Imagen Invisible" style="opacity: 0.5; width: 100%;">
+                                    <a href="{% url 'juego3' %}" class="btn btn-primary"
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Agregar la referencia a Bootstrap (asegúrate de que Bootstrap esté disponible en tu proyecto) -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </main>
+
+    <section class="general">
+        <div class="general-1">
+            <h2>Autoconocimiento:</h2>
+            <p>
+                Al tomar las pruebas, los usuarios pueden obtener una mejor
+                comprensión de sus emociones, pensamientos y comportamientos.
+                Esto puede ayudarles a aumentar su autoconciencia y comprender
+                mejor sus desafíos mentales.
+            </p>
+            <!--<a href="#" class="btn-1">informacion</a>-->
+        </div>
+        <div class="general-2"></div>
+    </section>
+
+    <section class="general">
+        <div class="general-3"></div>
+        <div class="general-1">
+            <h2>Detección Temprana de Problemas</h2>
+            <p>
+                Las pruebas de salud mental pueden ayudar a detectar problemas emocionales
+                o psicológicos en una etapa temprana. Esto facilita la intervención y el
+                tratamiento oportunos.
+            </p>
+            <!--<a href="#" class="btn-1">informacion</a>-->
+        </div>
+    </section>
+
+    <section class="blog container">
+        <h2>Blog</h2>
+        <p>en este espacio encontraras fraces de motivacion y aprendisaje para tu dia a dia</p>
+
+        <div class="blog-content">
+            <div class="blog-1">
+                <img src="../static/images/blog1.jpg" alt="">
+                <h3>"Forjando el Futuro: Cómo tus Pensamientos dan Forma a tu Destino"</h3>
+                <p>
+                    La frase nos recuerda el poder que tienen nuestros pensamientos en la
+                    creación de nuestra realidad. Cada pensamiento y creencia que sostenemos
+                    influye en nuestras acciones y decisiones, lo que a su vez moldea el curso
+                    de nuestras vidas. Es esencial cultivar pensamientos positivos y constructivos
+                    para crear la vida que deseamos.
+                </p>
+            </div>
+            <div class="blog-1">
+                <img src="../static/images/blog2.png" alt="">
+                <h3> "El Arte de la Autodescubierta: Liberándote de Etiquetas para Abrazar tu Esencia"</h3>
+                <p>
+                    La frase nos invita a explorar nuestra identidad de manera fluida y sin limitaciones.
+                    A menudo, nos definimos por roles o etiquetas que nos imponemos a nosotros mismos o
+                    que otros nos imponen. Sin embargo, la verdadera autenticidad y crecimiento provienen
+                    de abrazar nuestro potencial infinito y estar dispuestos a cambiar y evolucionar.
+                </p>
+            </div>
+            <div class="blog-1">
+                <img src="../static/images/blog3.png" alt="">
+                <h3> "El Viaje de Sanación: Transformándote en la Mejor Versión de Ti Mismo"</h3>
+                <p>
+                    La frase nos recuerda que el proceso de sanación no solo implica la curación de
+                    heridas físicas o emocionales, sino también un profundo cambio en nuestra perspectiva
+                    y forma de vida. Para sanar, a menudo debemos liberarnos de viejas creencias y hábitos
+                    que nos limitan, abrazando un nuevo camino hacia la salud y la plenitud.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content container">
+            <div class="link">
+                <h3>Correo</h3>
+                <ul>
+                    <li><a href="#">Alejolop507@gmail.com</a></li>
+                </ul>
+            </div>
+            <div class="link">
+                <h3>facebook</h3>
+                <ul>
+                    <li><a href="#">Manuel Lopez Rojas</a></li>
+
+                </ul>
+            </div>
+            <div class="link">
+                <h3>Discord</h3>
+                <ul>
+                    <li><a href="#">gatozero.</a></li>
+                </ul>
+            </div>
+            <div class="link">
+                <h3>WhatsApp</h3>
+                <ul>
+                    <li><a href="#">322 403 08 71</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+
+</html>
