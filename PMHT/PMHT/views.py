@@ -1,18 +1,31 @@
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.models import User
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .forms import RegisterForm, EncuentroForm
-from django.contrib.auth.decorators import login_required
-from django.http import Http404, JsonResponse
-from core.models import CategoriaTest, Pregunta, Respuesta, Resultado, Encuentro, Evento, Puntuacion, TiempoJuego
-from core.models import RespuestaUsuario
-from django.db.models import Count
-from django.views import View
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+
 from django.views.decorators.csrf import csrf_exempt
+
+from django.contrib import messages
+from django.contrib.auth import login, logout, authenticate
+
+from django.contrib.auth.models import User
+
+from .forms import RegisterForm, EncuentroForm
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+from django.http import Http404, JsonResponse, HttpResponseRedirect
+import json
+
+from core.models import CategoriaTest, Pregunta, Respuesta, Resultado,ResultadoUsuario, Encuentro, Puntuacion, TiempoJuego
+from django.db.models import Count
+
+from django.views import View
+from datetime import datetime
+from django.utils import timezone
+
+
+
 
 def is_admin(user):
     return user.is_superuser
@@ -20,7 +33,7 @@ def is_admin(user):
 def is_not_admin(user):
     return not user.is_superuser
 
-def login_view(request):
+def login_view (request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -31,20 +44,19 @@ def login_view(request):
             login(request, user)
             messages.success(request, 'Bienvenido {}'.format(user.username))
             return redirect('inicio')
-        else:
+        else: 
             messages.error(request, 'Usuario o contraseña incorrectos')
-    return render(request, 'login.html', {})
-
+    return render(request, 'login.html',{
+    })
 def juego1(request):
     return render(request, 'juego1.html')
-
 def juego2(request):
     return render(request, 'juego2.html')
-
 def juego3(request):
     return render(request, 'juego3.html')
 
-def logout_view(request):
+
+def logout_view (request):
     logout(request)
     return redirect('login')
 
@@ -81,61 +93,64 @@ def register(request):
             return redirect('inicio')
 
     return render(request, 'register.html', {'form': form})
-
 @login_required
 def inicio(request):
+    
     if is_admin(request.user):
         return redirect('admin:index')
-    return render(request, 'inicio.html', {})
-
+    return render(request, 'inicio.html', {
+        
+    })
 
 @login_required
 def categoria_detalle(request, categoria_id):
-    # Cambia la siguiente línea para obtener la instancia de CategoriaTest con el ID 1
-    categoria = CategoriaTest.objects.get(id=1)
-    return render(request, 'categoria_detalle.html', {
-        'categoria': categoria
-    })
+    categoria = get_object_or_404(CategoriaTest, id=categoria_id)
+    return render(request, 'categoria_detalle.html', {'categoria': categoria})
 
-
+@login_required
 def preguntas_categoria(request, categoria_id):
     categoria = get_object_or_404(CategoriaTest, id=categoria_id)
     preguntas = Pregunta.objects.filter(categoria=categoria)
     return render(request, 'daily_test.html', {'categoria': categoria, 'preguntas': preguntas})
 
+
+@login_required
 def calcular_resultado(request, categoria_id):
     if request.method == 'POST':
-        # Obtén todas las respuestas enviadas en el formulario
-        respuestas_seleccionadas = request.POST
+        usuario = request.user
+        fecha = datetime.now()
 
-        # Inicializa una variable para la puntuación total
+        respuestas_seleccionadas = request.POST
+        respuestas_usuario = []
+
         puntuacion_total = 0
 
-        # Recorre todas las respuestas seleccionadas
         for key, value in respuestas_seleccionadas.items():
             if key.startswith('pregunta_'):
                 respuesta_id = int(value)
                 respuesta = Respuesta.objects.get(id=respuesta_id)
                 puntuacion_total += respuesta.valor
+                respuestas_usuario.append(respuesta)
 
-                respuesta_usuario = RespuestaUsuario(
-                    usuario=request.user,
-                    pregunta=respuesta.pregunta,
-                    respuesta_seleccionada=respuesta,
-                )
-                respuesta_usuario.save()
+        resultado_usuario, created = ResultadoUsuario.objects.get_or_create(
+            usuario=usuario,
+            fecha=fecha,
+            defaults={'total_puntos': puntuacion_total}
+        )
+
+        if not created:
+            resultado_usuario.total_puntos = puntuacion_total
+            resultado_usuario.save()
 
         if 10 <= puntuacion_total <= 30:
-            # Redirect to the agendamiento_encuentro view
-            return render(request, 'Encuentro.html',{})
-
-        # Continue with the existing logic for other score ranges
+            return render(request, 'Encuentro.html', {})
         else:
-            # Continue with the existing logic for other score ranges
             resultado_id = determinar_resultado(puntuacion_total)
             if resultado_id is None:
                 return render(request, 'resultado_no_encontrado.html')
             return redirect('mostrar_resultado', categoria_id=categoria_id, resultado_id=resultado_id)
+
+
 
 def determinar_resultado(puntuacion_total):
     resultados = Resultado.objects.all()
@@ -145,83 +160,22 @@ def determinar_resultado(puntuacion_total):
     # Si no coincide con ningún resultado, devuelve un valor predeterminado (puedes ajustarlo según tus necesidades)
     return 0  # Por ejemplo, 0 representa "Sin resultado"
 
+
 def mostrar_resultado(request, categoria_id, resultado_id):
     if resultado_id == 0:  # O el valor que represente la falta de un resultado específico
         raise Http404("No se encontró un resultado para esta puntuación.")
     resultado = get_object_or_404(Resultado, id=resultado_id)
-    return render(request, 'mostrar_resultado.html', {'resultado': resultado})
+    ultimo_resultado = ResultadoUsuario.objects.filter(usuario=request.user).order_by('-fecha').first()
+    return render(request, 'mostrar_resultado.html', {'resultado': resultado, 'ultimo_resultado': ultimo_resultado})
 
 def resultado_no_encontrado(request):
     return render(request, 'resultado_no_encontrado.html')
 
 
 # ojo llego el errores
-def agendamiento_encuentro(request):
-    if request.method == 'POST':
-        form = EncuentroForm(request.POST)
-        if form.is_valid():
-            form.save()  # Esto guardará el formulario en la base de datos
-            return redirect('agendar_encuentro')  # Redirige a una página exitosa
-    else:
-        form = EncuentroForm()
-
-    return render(request, 'Encuentro.html', {'form': form})
-
-#aqui esta el error # En PNBM/views.
-
-# Importaciones y otros métodos ...
-
-# Otras importaciones y métodos ...
-
-class CalendarioPsicologoView(View):
-    template_name = 'calendario.html'
-
-    def get_eventos_data(self):
-        # Aquí deberías implementar la lógica para obtener los datos de eventos
-        # desde tu base de datos u otra fuente de datos
-        # Este es solo un ejemplo, deberías ajustarlo según tu aplicación
-        return [{'titulo': 'Evento 1', 'fecha': '2023-12-05'}, {'titulo': 'Evento 2', 'fecha': '2023-12-10'}]
-
-    def get(self, request, *args, **kwargs):
-        # Lógica para obtener datos del calendario
-        eventos_data = self.get_eventos_data()
-        return render(request, self.template_name, {'eventos_data': eventos_data})
 
 
-def mostrar_encuentros(request):
-    # Lógica para obtener datos de encuentros
-    encuentros = Encuentro.objects.all()
-    return render(request, 'mostrar_encuentros.html', {'encuentros': encuentros})
 
-
-class EventosCalendarioView(View):
-    def get(self, request, *args, **kwargs):
-        eventos = Evento.objects.all()
-        eventos_data = [
-            {
-                'title': evento.title,
-                'start': evento.start.strftime('%Y-%m-%dT%H:%M:%S'),
-                'color': evento.color,
-                'editable': evento.editable,
-            }
-            for evento in eventos
-        ]
-        return JsonResponse(eventos_data, safe=False)
-
-class AgendamientoEncuentroView(View):
-    def get(self, request, *args, **kwargs):
-        fecha_seleccionada = request.GET.get('fecha')
-        # Resto de la lógica...
-def agregar_encuentro(request):
-    if request.method == 'POST':
-        form = EncuentroForm(request.POST)
-        if form.is_valid():
-            form.save()  # Esto guardará el objeto Encuentro en la base de datos
-            return redirect('lista_encuentros')  # Puedes redirigir a otra vista o a la lista de encuentros
-    else:
-        form = EncuentroForm()
-
-    return render(request, 'Encuentro.html', {'form': form})
 
 
 @csrf_exempt
@@ -241,7 +195,7 @@ def guardar_puntuacion(request):
         else:
             # Si no hay una puntuación existente, crea un nuevo registro
             puntuacion = Puntuacion(usuario=usuario, respuestas_correctas=respuestas_correctas)
-            puntuacion.save()
+            puntuacion.save()  # Guardar el objeto en la base de datos
 
         # Agregar un mensaje de éxito
         messages.success(request, 'Puntuación guardada exitosamente.')
@@ -295,3 +249,114 @@ def tabla_tiempo(request):
 
     # Renderizar la plantilla con los tiempos obtenidos
     return render(request, 'clasificacion2.html', {'tiempos': tiempos})
+
+
+from django.http import HttpResponseRedirect
+ # Ajusta la importación según la ubicación de tu modelo Encuentro
+
+@login_required
+def agendar_encuentro(request):
+    context = {}
+
+    if request.method == 'POST':
+        documento = request.POST.get('Documento')
+        nombre = request.POST.get('nombre')
+        nacido = request.POST.get('nacido')
+        hm = request.POST.get('hm')
+        edad = request.POST.get('edad')
+        email = request.POST.get('email')
+        telefono = request.POST.get('telefono')
+        jornada = request.POST.get('jornada')
+        psicologo = request.POST.get('medico')
+        fecha_encuentro = request.POST.get('fecha')
+        razon = request.POST.get('cajaTexto') if request.POST.get('razones') == 'otro' else 'Determinado'
+
+        # Verificar si es menor de edad y obtener datos del acompañante si corresponde
+        if edad == 'menor':
+            nombre_acompanante = request.POST.get('nombreAcompanante')
+            tipo_acompanante = request.POST.get('tipoAcompanante')
+            documento_acompanante = request.POST.get('documentoAcompanante')
+        else:
+            nombre_acompanante, tipo_acompanante, documento_acompanante = None, None, None
+
+        # Marcar el encuentro como aceptado si la fecha es futura
+        fecha_actual = datetime.now().date()
+        fecha_encuentro = datetime.strptime(fecha_encuentro, '%Y-%m-%d').date()
+
+        if fecha_encuentro > fecha_actual:
+            encuentro = Encuentro(
+                documento=documento,
+                nombre=nombre,
+                nacido=nacido,
+                hm=hm,
+                edad=edad,
+                nombre_acompanante=nombre_acompanante,
+                tipo_acompanante=tipo_acompanante,
+                documento_acompanante=documento_acompanante,
+                email=email,
+                telefono=telefono,
+                jornada=jornada,
+                psicologo=psicologo,
+                fecha_encuentro=fecha_encuentro,
+                razon=razon,
+                aceptado=True  # Marcando el encuentro como aceptado
+            )
+            encuentro.save()
+
+        return HttpResponseRedirect(reverse('inicio'))
+
+    encuentros = Encuentro.objects.all()
+    context = {'encuentros': encuentros}
+    return render(request, 'Encuentro.html', context)
+
+def calendario_psicologo(request):
+    encuentros_aceptados = Encuentro.objects.filter(aceptado=True)
+
+    eventos_calendario = []
+    for encuentro in encuentros_aceptados:
+        evento = {
+            'title': encuentro.nombre,
+            'start': encuentro.fecha_encuentro.strftime('%Y-%m-%d'),
+        }
+        eventos_calendario.append(evento)
+
+    return render(request, 'calendario.html', {'eventos': eventos_calendario})
+
+
+
+
+def eventos_calendario(request):
+    # Obtener todos los encuentros
+    encuentros = Encuentro.objects.all()
+
+    eventos_calendario = []
+    for encuentro in encuentros:
+        color = '#3366CC'  # Por defecto, color azul
+
+        if encuentro.estado == 'Aprobado':
+            color = '#33CC33'  # Color verde para aprobado
+        elif encuentro.estado == 'Rechazado':
+            # Verificar si el encuentro fue rechazado hace más de una hora
+            if encuentro.timestamp_rechazo and timezone.now() > encuentro.timestamp_rechazo + timezone.timedelta(seconds=10):
+                encuentro.delete()
+                continue
+
+            # Establecer timestamp_rechazo si aún no se ha configurado
+            if not encuentro.timestamp_rechazo:
+                encuentro.timestamp_rechazo = timezone.now()
+                encuentro.save()
+            
+            color = '#CC3333'  # Color rojo para rechazado
+
+        # Construir el título del evento con el nombre y el estado del encuentro
+        title = f"{encuentro.nombre} - {encuentro.estado}"
+
+        evento = {
+            'title': title,
+            'start': encuentro.fecha_encuentro.strftime('%Y-%m-%d'),
+            'color': color,  # Establecer el color del evento según el estado
+            # Puedes agregar más campos como 'end' si los necesitas
+        }
+        eventos_calendario.append(evento)
+
+    return JsonResponse(eventos_calendario, safe=False)
