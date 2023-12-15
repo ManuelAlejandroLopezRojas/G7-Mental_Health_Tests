@@ -7,6 +7,10 @@
     <title>Juego de Preguntas con Imagen</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        body{
+            background: linear-gradient(90deg, #2ecc71, #3498db);
+
+        }
         .container-main {
             max-width: 800px;
             margin: 0 auto;
@@ -38,9 +42,6 @@
 </head>
 
 <body>
-    <header>
-        <a href="{% url 'inicio' %}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;">Regresar a Inicio</a>
-    </header>
     <i class="bi bi-chevron-left m-4" ><a href="{% url 'inicio' %}" ></a></i>
     <div class="container mt-5 container-main">
         <h1 class="text-center mb-4">Juego de Preguntas con Imagen</h1>
@@ -221,10 +222,9 @@
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            alert("Error al guardar la puntuación."); // Mensaje de error al guardar la puntuación
+                            alert("Puntuación guardada exitosamente."); // Cambiar este mensaje a éxito
                         } else {
-                            alert("Puntuación guardada exitosamente."); // Mensaje cuando se guarda correctamente
-
+                            alert("Error al guardar la puntuación.");
                         }
                     }
                 };

@@ -13,7 +13,7 @@
       justify-content: center;
       flex-direction: column;
       height: 100vh;
-      background-color: #f0f0f0;
+      background: linear-gradient(90deg, #2ecc71, #3498db);
     }
     .card {
       position: relative;
@@ -48,9 +48,6 @@
   </style>
 </head>
 <body>
-  <header>
-    <a href="{% url 'inicio' %}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;">Regresar a Inicio</a>
-</header>
   <i class="bi bi-chevron-left m-4" ><a href="{% url 'inicio' %}" ></a></i>
   <div class="card">
     <canvas id="myCanvas"></canvas>

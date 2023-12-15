@@ -22,11 +22,8 @@
 
         </div>
         <div class="header-content container">
-        <div class="container">
-            <h2>Prueba Diaria</h2>
-            <p>
-              Realiza la prueba diaria para evaluar tu bienestar emocional y psicológico.
-            </p>
+        <div class="container"><br><br>
+            <h2>Diario</h2><br><br>
       
             <form method="post" action="{% url 'calcular_resultado' categoria_id=categoria.id %}">
                 {% csrf_token %}
@@ -37,12 +34,15 @@
                     <h3>{{ pregunta.texto_pregunta }}</h3>
                     <!-- Mostrar las opciones de respuesta -->
                     {% for respuesta in pregunta.respuesta_set.all %}
-                      <label>
-                        <input type="radio" name="pregunta_{{ pregunta.id }}" value="{{ respuesta.id }}">
-                        {{ respuesta.texto_respuesta }}
-                      </label><br>
-                    {% endfor %}
-                  </div>
+                      <label class="box-label">
+                        <input type="radio" name="pregunta_{{ pregunta.id }}" id="option{{ respuesta.id }}" value="{{ respuesta.id }}">
+                        <div class="box-option">
+                          <div class="dot"></div>
+                          <span class="text">{{ respuesta.texto_respuesta }}</span>
+                        </div>
+                      </label>
+                    {% endfor %} <br>
+                  </div><br><br>
                 {% endfor %}
                 
                 <!-- Botón para enviar respuestas -->

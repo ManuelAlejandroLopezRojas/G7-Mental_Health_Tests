@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Puntuaciones del Juego 2</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .table {
+            width: 80%;
+            margin: auto;
+        }
+        th, td {
+            text-align: center;
+        }
+        .table thead th {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #d4edda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Puntuaciones del Juego 2</h1>
+        <table class="table table-hover">
+            <!-- Cabecera de la tabla -->
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Puntaje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Mostrar las puntuaciones del juego2 -->
+                {% for puntuacion in puntuaciones %}
+                <tr>
+                    <td>{{ puntuacion.id }}</td> <!-- Muestra el ID para verificar si se reciben datos -->
+                    <td>{{ puntuacion.usuario.username }}</td>
+                    <td>{{ puntuacion.puntaje }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

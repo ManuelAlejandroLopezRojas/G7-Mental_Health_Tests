@@ -1,71 +1,186 @@
-<!-- clasificacion2.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabla de Clasificación</title>
+    <!-- Incluir los enlaces a los archivos de estilos de Bootstrap -->
 
+</head>
+<body>
+
+
+
+<!-- Incluir el script de Bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabla de Clasificación</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/clasificacion.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Estilos CSS (puedes ajustar según tu diseño) */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(90deg, #2ecc71, #3498db);
-        }
 
-        /* Ajusta los estilos de la tabla según tu preferencia */
-        table {
-            width: 80%;
-            border-collapse: collapse;
-            margin: 20px auto;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f2f2f2;
-        }
-    </style>
+
+
+
 </head>
 <body>
+    <header class="header">
+        <div class="menu container">
+            <a href="{% url 'inicio' %}" class="logo">Mental Health Tests</a>
 
-    <header>
-        <a href="{% url 'inicio' %}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;">Regresar a Inicio</a>
+            <input type="checkbox" id="menu"/>
+            <label for="menu">
+                <img src="../static/images/menu.png" class="menu-icono" alt="">
+            </label>
+
+            {% include 'navbar.html' %}
+
+        </div>
+        <div class="header-content container">
+            <h1>Mental Health </h1>
+            </p>
+        </div>
     </header>
+    <section class="coffee">
+        <div class="background-image"></div>
 
-    <h1>Tabla de Clasificación</h1>
+        <div class="container">
+            <h2 class="text-center text-dark mb-4">Tabla de Clasificación de tiempo</h2>
+            <div class="table-section">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-header">
+                            <tr>
+                                <th scope="col">Posición</th>
+                                <th scope="col">Nombre de Usuario</th>
+                                <th scope="col">tiempo</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-content">
+                            <!-- Iterar sobre las puntuaciones para mostrar la tabla -->
+                            {% for tiempo in tiempos %}
+                            <tr {% if forloop.first %}class="top-user"{% endif %}>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    {% if tiempo.usuario %}
+                                    {{ tiempo.usuario }}
+                                    {% else %}
+                                    Nombre no disponible
+                                    {% endif %}
+                                </td>
+                                <td>{{ tiempo.get_tiempo_formateado }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <main class="services">
 
-    <table>
-        <thead>
-            <tr>
-                <th>Usuario</th>
-                <th>Tiempo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Iterar sobre los tiempos para mostrar la tabla -->
-            {% for tiempo in tiempos %}
-                <tr>
-                    <td>{{ tiempo.usuario }}</td>
-                    <td>{{ tiempo.get_tiempo_formateado }}</td> <!-- Aquí se utiliza el método para formatear el tiempo -->
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <i class="bi bi-chevron-left m-4"><a href="{% url 'inicio' %}"></a></i>
 
-    <!-- Incluir el script de Bootstrap -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <div class="container">
+            <div class="row">
+                <!-- Sección 1 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src={% static 'images/motivacion.jpg' %} class="card-img-top" alt="Imagen 1">
+                        <div class="card-body">
+                            <h5 class="card-title">rompecabezas de motivacion</h5>
+                            <p class="card-text" style="color: black;"></p>
+                            <div style="position: relative;">
+                                <img src={% static 'images/motivacion.jpg' %} alt="Imagen Invisible"
+                                    style="opacity: 0.5; width: 100%;">
+                                <a href="{% url 'juego1' %}" class="btn btn-primary"
+                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    
+                <!-- Sección 2 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src={% static 'images/mentalidad.jpg' %} class="card-img-top" alt="Imagen 2">
+                        <div class="card-body">
+                            <h5 class="card-title">juego de preguntas</h5>
+                            <p class="card-text" style="color: black;"></p>
+                            <div style="position: relative;">
+                                <img src={% static 'images/mentalidad.jpg' %} alt="Imagen Invisible"
+                                    style="opacity: 0.5; width: 100%;">
+                                <a href="{% url 'juego2' %}" class="btn btn-primary"
+                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección 3 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="{% static 'images/respiracion.jpg' %}" class="card-img-top" alt="Imagen 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Título del juego 3</h5>
+                            <p class="card-text" style="color: black;"></p>
+                            <div style="position: relative;">
+                                <img src="{% static 'images/respiracion.jpg' %}" alt="Imagen Invisible" style="opacity: 0.5; width: 100%;">
+                                <a href="{% url 'juego3' %}" class="btn btn-primary"
+                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agregar la referencia a Bootstrap (asegúrate de que Bootstrap esté disponible en tu proyecto) -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content container">
+            <div class="link">
+                <h3>Correo</h3>
+                <ul>
+                    <li><a href="#">Alejolop507@gmail.com</a></li>
+                </ul>
+            </div>
+            <div class="link">
+                <h3>facebook</h3>
+                <ul>
+                    <li><a href="#">Manuel Lopez Rojas</a></li>
+
+                </ul>
+            </div>
+            <div class="link">
+                <h3>Discord</h3>
+                <ul>
+                    <li><a href="#">gatozero.</a></li>
+                </ul>
+            </div>
+            <div class="link">
+                <h3>WhatsApp</h3>
+                <ul>
+                    <li><a href="#">322 403 08 71</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
 </html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Puntuaciones del Juego</title>
+</head>
+<body>
+    <h1>Puntuaciones del Juego</h1>
+    <ul>
+        {% for puntuacion in puntuaciones %}
+            <li>{{ puntuacion.usuario.username }} - Puntaje: {{ puntuacion.puntaje }}</li>
+        {% empty %}
+            <li>No hay puntuaciones todavía.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

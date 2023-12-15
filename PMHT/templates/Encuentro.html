@@ -1,57 +1,47 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamiento de Encuentro</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/inicio.css' %}">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <!-- Agregamos Font Awesome -->
-    <style>
-        .color-change-button {
-            padding: 10px 20px;
-            background: linear-gradient(90deg, #2ecc71 , #3498db);
-            color: white;
-            border: none;
-            transition: background-color 0.3s;
-        }
-        body {
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-        }
-        .color-change-button {
-            width: 100%;
-            height: 50px;
-            margin-top: 60px;
-            color: #ffffff; /* Cambio de color del texto */
-            border: 0px;
-            background: linear-gradient(90deg, #34addb, #2ecc71);
-            font-weight: 300;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .color-change-button:hover {
-            background: linear-gradient(90deg, #2ecc71, #34addb);
-        }
-    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <ul>
-            {% for encuentro in encuentros %}
-                <li>{{ encuentro.nombre }} - {{ encuentro.fecha }}</li>
-                <!-- Ajusta esto según los campos que hayas definido en tu modelo Encuentro -->
-            {% endfor %}
-        </ul>
-    </div>
-    <a href="#" onclick="history.go(-1);" class="btn btn-secondary mb-8"><i class="fas fa-arrow-left"></i> Volver</a>
+    <header class="header">
+        <div class="menu container">
+            <a href="{% url 'inicio' %}" class="logo">Mental Health Tests</a>
+
+            <input type="checkbox" id="menu"/>
+            <label for="menu">
+                <img src="../static/images/menu.png" class="menu-icono" alt="">
+            </label>
+
+            {% include 'navbar.html' %}
+
+        </div>
+        <div class="header-content container">
+            <h1>Mental Health Tests</h1>
+            <p>"Mental Health Tests" es una plataforma en línea que tiene como objetivo brindar apoyo 
+                y recursos relacionados con la salud mental. Su enfoque principal es proporcionar 
+                una variedad de pruebas y evaluaciones de salud mental diseñadas para ayudar a las personas 
+                a comprender y evaluar su bienestar emocional y psicológico.
+            </p>
+        </div>
+    </header>
+<section class="coffee">
     <div class="container mt-1">
         <div class="row">
             <div class="col-md-9 offset-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h2 class="card-title text-center">Agendamiento de Encuentro</h2>
-                        <form onsubmit="return validateForm()">
+
+                        <form action="{% url 'agendar_encuentro' %}" method="POST" onsubmit="return validateForm()">
+                            {% csrf_token %}
                             <div class="form-group">
                                 <label for="Documento">Documento</label>
                                 <select class="form-control" id="Documento" name="Documento" required>
@@ -64,7 +54,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" placeholder="Nombre" autocomplete="additional-name" required>
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" autocomplete="additional-name" required>
                             </div>
                             <div class="form-group">
                                 <label for="nacido">Año de nacimiento</label>
@@ -100,12 +90,13 @@
                             
                             <div class="form-group">
                                 <label for="email">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="email" placeholder="example@example.com" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="example@example.com" required>
                             </div>
                             <div class="form-group">
                                 <label for="telefono">Teléfono</label>
-                                <input type="tel" class="form-control" id="telefono" placeholder="310-571-3563" pattern="[0-9]{10}" oninput="validarNumero(this)"  required minlength="7" maxlength="10" required>
+                                <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="310-571-3563" pattern="[0-9]{10}" oninput="validarNumero(this)" required minlength="7" maxlength="10" required>
                             </div>
+                            
                             <div class="form-group">
                                 <label for="jornada">Seleccione una Jornada</label>
                                 <select class="form-control" id="jornada" name="jornada" required>
@@ -118,13 +109,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="medico">Psicologo</label>
-                                <select class="form-control" id="medico" required>
+                                <select class="form-control" id="medico" name="medico" required>
                                     <option value="">Selecciona un Psicologo</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="fecha">Fecha de Encuentro</label>
-                                <input type="date" class="form-control" id="fecha" required>
+                                <input type="date" class="form-control" id="fecha" name="fecha" required>
                             </div>
                             <label for="razones">Selecciona una opción:</label>
                             <select class="form-control" id="razones"  onchange="toggleTextBox()" required>
@@ -137,19 +128,14 @@
                                 <input type="checkbox" class="form-check-input" id="terminos" required>
                                 <label class="form-check-label" for="terminos">Acepto los <a href="https://terminosya.com/">términos y condiciones</a></label>
                             </div>
-                            <form method="post" action="{% url 'agregar_encuentro' %}">
-                                {% csrf_token %}
-                                <!-- Resto de tu formulario -->
-                                <button type="submit" class="color-change-button btn btn-primary btn-block mt-3" id="Reagendar">Agendar Encuentro</button>
-                            </form>
+                            <button type="submit" class="color-change-button btn btn-primary btn-block mt-3" id="Reagendar">Agendar Encuentro</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="encuentro.js"></script>
-    <script src="server.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
@@ -261,9 +247,108 @@
                         return false;
                     }
 
+                    
+
                     return true; // Permite el envío del formulario si todas las validaciones son exitosas
                 }
        
     </script>
+</section>
+<main class="services">
+
+    <i class="bi bi-chevron-left m-4"><a href="{% url 'inicio' %}"></a></i>
+
+    <div class="container">
+        <div class="row">
+            <!-- Sección 1 -->
+            <div class="col-md-4">
+                <div class="card">
+                    <img src={% static 'images/motivacion.jpg' %} class="card-img-top" alt="Imagen 1">
+                    <div class="card-body">
+                        <h5 class="card-title">rompecabezas de motivacion</h5>
+                        <p class="card-text" style="color: black;"></p>
+                        <div style="position: relative;">
+                            <img src={% static 'images/motivacion.jpg' %} alt="Imagen Invisible"
+                                style="opacity: 0.5; width: 100%;">
+                            <a href="{% url 'juego1' %}" class="btn btn-primary"
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección 2 -->
+            <div class="col-md-4">
+                <div class="card">
+                    <img src={% static 'images/mentalidad.jpg' %} class="card-img-top" alt="Imagen 2">
+                    <div class="card-body">
+                        <h5 class="card-title">juego de preguntas</h5>
+                        <p class="card-text" style="color: black;"></p>
+                        <div style="position: relative;">
+                            <img src={% static 'images/mentalidad.jpg' %} alt="Imagen Invisible"
+                                style="opacity: 0.5; width: 100%;">
+                            <a href="{% url 'juego2' %}" class="btn btn-primary"
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección 3 -->
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{% static 'images/respiracion.jpg' %}" class="card-img-top" alt="Imagen 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Título del juego 3</h5>
+                        <p class="card-text" style="color: black;"></p>
+                        <div style="position: relative;">
+                            <img src="{% static 'images/respiracion.jpg' %}" alt="Imagen Invisible" style="opacity: 0.5; width: 100%;">
+                            <a href="{% url 'juego3' %}" class="btn btn-primary"
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Entrar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agregar la referencia a Bootstrap (asegúrate de que Bootstrap esté disponible en tu proyecto) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</main>
+
+    <footer class="footer">
+        <div class="footer-content container">
+            <div class="link">
+                <h3>Correo</h3>
+                <ul>
+                    <li><a href="#">Alejolop507@gmail.com</a></li>
+                </ul>
+            </div>
+            <div class="link">
+                <h3>facebook</h3>
+                <ul>
+                    <li><a href="#">Manuel Lopez Rojas</a></li>
+
+                </ul>
+            </div>
+            <div class="link">
+                <h3>Discord</h3>
+                <ul>
+                    <li><a href="#">gatozero.</a></li>
+                </ul>
+            </div>
+            <div class="link">
+                <h3>WhatsApp</h3>
+                <ul>
+                    <li><a href="#">322 403 08 71</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
 </html>

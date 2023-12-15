@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CategoriaTest, Pregunta, Respuesta, Resultado, Evento, RespuestaUsuario, Encuentro
+from .models import CategoriaTest, Pregunta, Respuesta, Resultado, ResultadoUsuario, Puntuacion, TiempoJuego, Encuentro
 
 @admin.register(CategoriaTest)
 class CategoriaTestAdmin(admin.ModelAdmin):
@@ -20,25 +20,36 @@ class RespuestaAdmin(admin.ModelAdmin):
 class ResultadoAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'puntuacion_min', 'puntuacion_max')
     search_fields = ('titulo',)
-class RespuestaUsuarioAdmin(admin.ModelAdmin):
-    list_display = ['usuario', 'pregunta', 'respuesta_seleccionada', 'fecha_respuesta']
-    readonly_fields = ['usuario', 'pregunta', 'respuesta_seleccionada', 'fecha_respuesta']
-    list_filter = ('usuario',)
 
-admin.site.register(RespuestaUsuario, RespuestaUsuarioAdmin)
+@admin.register(ResultadoUsuario)
+class ResultadoUsuarioAdmin(admin.ModelAdmin):
+    list_display = ['usuario', 'fecha', 'total_puntos']
+    search_fields = ['usuario__username']  # Permite buscar por nombre de usuario en el admin
+    list_filter = ['usuario__username']
 
-@admin.register(Evento)
-class EventoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'start', 'color', 'editable')
-    search_fields = ['title']
+
+
+class PuntuacionJuegoAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'respuestas_correctas', 'fecha',)
+    search_fields = ('jugador__username',)
+    list_filter = ('fecha',)
+
+admin.site.register(Puntuacion, PuntuacionJuegoAdmin)
+
+class TiempoJuegoAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'get_tiempo')  # Reemplaza 'tiempo' con el método 'get_tiempo'
+    list_filter = ('usuario',)  # Asegúrate de que 'usuario' sea un campo válido en el modelo
+
+    def get_tiempo(self, obj):
+        return obj.get_tiempo_formateado()  # Llama al método para obtener el tiempo formateado
+
+    get_tiempo.short_description = 'Tiempo'  # Nombre que se mostrará en la interfaz admin
+
+admin.site.register(TiempoJuego, TiempoJuegoAdmin)
 
 class EncuentroAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'fecha_encuentro', 'jornada', 'psicologo')
-    search_fields = ('nombre', 'fecha_encuentro', 'jornada', 'psicologo')  # Campos por los cuales se puede buscar
+    list_display = ('nombre', 'fecha_creacion', 'fecha_encuentro', 'aceptado')  # Columnas que se mostrarán en el admin
+    list_filter = ('aceptado',)  # Agrega un filtro para mostrar encuentros aceptados o rechazados
 
-    def save_model(self, request, obj, form, change):
-        # Sobreescribe el método para personalizar el guardado del modelo
-        obj.save()
 
-# Registra el modelo con la clase de administración personalizada
 admin.site.register(Encuentro, EncuentroAdmin)

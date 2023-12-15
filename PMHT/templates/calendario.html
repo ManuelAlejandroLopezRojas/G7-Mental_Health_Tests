@@ -1,95 +1,96 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Calendario del Psicólogo</title>
-    <link rel="stylesheet" href="{% static 'css/tu_archivo.css' %}" />
-    <script src="{% static 'js/tu_archivo.js' %}"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
-    />
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  </head>
-  <body>
-    <style>
-      body {
-        background-image: url(../static/images/c2.png);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        /* Agrega una declaración para especificar el tamaño máximo */
-        max-width: 100%;
-        max-height: 100%;
-      }
-      
-      
-      .container {
-        background: linear-gradient(90deg, #2ecc71, #3498db);
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        max-width: 1000px;
-        margin: 0 auto;
-      }
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario de Encuentros</title>
+  <style>
+    body {
+      background-image: url(../static/images/c2.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
 
-      #psicologo-calendar {
-        max-width: 800px;
-        margin: 0 auto;
-      }
-    </style>
+    .container {
+      background: linear-gradient(90deg, #2ecc71, #3498db);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      width: 700px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 20px; /* Añade un espacio interno si lo necesitas */
+    }
 
-    <div class="container">
-      <div id="psicologo-calendar"></div>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        $.ajax({
-          url: "{% url 'eventos_calendario' %}",
-          type: "GET",
-          success: function (data) {
-            $("#psicologo-calendar").fullCalendar({
-              header: {
-                left: "prev,next today",
-                center: "title",
-                right: "month,agendaWeek,agendaDay",
-              },
-              defaultDate: moment(),
-              editable: false,
-              eventLimit: true,
-              displayEventTime: false,
-              events: data,
-              dayClick: function (date, jsEvent, view) {
-                // ... (código del díaClick sin cambios)
-              },
-              eventRender: function (event, element) {
-                element.css("background-color", event.color);
-              },
-              validRange: {
-                start: moment(),
-                end: moment().add(2, "months"),
-              },
-            });
-          },
-          error: function (error) {
-            console.log("Error al cargar eventos:", error);
-          },
-        });
+    /* Ajustes para el calendario */
+    .psicologo-calendar {
+      width: 100%; /* Ancho máximo del calendario */
+      max-width: 1000px; /* O ajusta según lo necesites */
+      margin: 0 auto; /* Centrar el calendario */
+      height: 600px; /* Altura deseada */
+    }
+
+    /* Estilos para los eventos */
+    .fc-event-title-container {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal !important;
+    }
+
+    .fc-daygrid-event {
+      height: auto !important;
+      padding: 2px 5px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="psicologo-calendar" id="calendario"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendario');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        buttonText: {
+          today: 'Hoy', // Cambia 'today' por 'Hoy'
+          month: 'Mes',
+          week: 'Semana',
+          day: 'Dia',
+        },
+        locale: 'es', // Establece el idioma en español
+        events: {
+          url: '{% url 'eventos_calendario' %}',
+          method: 'GET',
+          failure: function() {
+            alert('Error al cargar eventos');
+          }
+        },
+        eventDidMount: function(info) {
+          // Acceder al elemento del evento
+          var eventElement = info.el;
+
+          // Agregar una clase a los eventos para identificarlos fácilmente
+          eventElement.classList.add('custom-event');
+        },
       });
-    </script>
-  </body>
+      calendar.render();
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js" integrity="sha256-J37ZtjEw94oWBNZ9w/XC73raGXE9t10//XHJfKz2QCM=" crossorigin="anonymous"></script>
+</body>
 </html>

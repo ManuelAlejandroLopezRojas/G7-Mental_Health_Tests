@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/juego1.css' %}">
-
     <title>Juego de rompecabezas</title>
 
     <style>
+        body{
+            background:linear-gradient(90deg, #2ecc71, #3498db);
+        }
         .tableBtn-container {
             width: 280px;
             margin: auto;
@@ -71,48 +73,43 @@
             z-index: -1;
         }
     
-        body{
-            background: linear-gradient(90deg, #2ecc71, #3498db);
-
-        }
+        
         
     
     </style>
 </head>
 <body>
-    <header>
-        <a href="{% url 'inicio' %}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; border: 1px solid #007bff;">Regresar a Inicio</a>
-    </header>
-        <section class="counter-container">
-            <span class="counter">00:00:00</span>
-        </section>
-        <div class="board"></div>
-        <section class="first-screen">
-            <p>Completa el rompecabezas!</p>
-            <img src="{% static 'images/juego.png' %}" alt="">
-        </section>
-        <section class="startBtn-container">
-            <button class="play-btn" id="start">Empezar</button>
-            <div class="btn-shadow"></div>
-        </section>
+    
+    <section class="counter-container">
+        <span class="counter">00:00:00</span>
+    </section>
+    <div class="board"></div>
+    <section class="first-screen">
+        <p>Completa el rompecabezas!</p>
+        <img src="{% static 'images/juego.png' %}" alt="">
+    </section>
+    <section class="startBtn-container">
+        <button class="play-btn" id="start">Empezar</button>
+        <div class="btn-shadow"></div>
+    </section>
 
-        
-        <section class="tableBtn-container" style="display: none;">
-            <form id="redirectForm" method="GET" action="{% url 'clasificacion_tiempo' %}">
-                <button type="submit" class="table-btn" id="table">Ir a Clasificación</button>
-                <div class="tableBtn-shadow"></div>
-            </form>
-        </section>
-        
-        <form id="saveForm" method="POST" action="/guardar_tiempo/">
-            {% csrf_token %}
-            <input type="hidden" id="tiempoInput" name="tiempo" value=""> 
+    
+    <section class="tableBtn-container" style="display: none;">
+        <form id="redirectForm" method="GET" action="{% url 'clasificacion_tiempo' %}">
+            <button type="submit" class="table-btn" id="table">Ir a Clasificación</button>
+            <div class="tableBtn-shadow"></div>
         </form>
-        
-        <section class="saveBtn-container" style="display: none;">
-            <button type="submit" class="save-btn" id="save">Guardar Puntuación</button>
-            <div class="saveBtn-shadow"></div>
-        </section>
+    </section>
+    
+    <form id="saveForm" method="POST" action="/guardar_tiempo/">
+        {% csrf_token %}
+        <input type="hidden" id="tiempoInput" name="tiempo" value=""> 
+    </form>
+    
+    <section class="saveBtn-container" style="display: none;">
+        <button type="submit" class="save-btn" id="save">Guardar Puntuación</button>
+        <div class="saveBtn-shadow"></div>
+    </section>
         
     
     
@@ -460,7 +457,7 @@
         
         
         // Llamar a la función de ajuste cuando sea necesario, por ejemplo, después de finalizar el juego
-        adjustTableButtonPosition();
+
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
